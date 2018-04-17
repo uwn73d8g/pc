@@ -1,0 +1,41 @@
+!0010  # entry point is 0x0010
+@0010
+28800f	# 0010:  prologue:  addi	  r1  r0  0x0f    # set up stack pointer register
+3b900c	# 0013:  	   shftl  r7  r1  $12
+54800d	# 0016:  	   call   r1  main
+00	# 0019:  	   stop
+	# 001a:  	.align
+108e	# 001a:  main:   sw      r1  r0  r7      # push return address
+2bfffe	# 001c:  	addi    r7  r7 $-2      # update stack pointer
+2bfffa	# 001f:  	addi    r7  r7 $-6      # allocate space for return val and 2 args
+290004	# 0022:  	addi    r2  r0 $4       # index from sp to 1st arg
+298005	# 0025:  	addi    r3  r0 $5       # first arg value
+11f4	# 0028:  	sw      r3  r7 r2       # store in stack frame
+292ffe	# 002a:  	addi    r2  r2 $-2      # index from sp to 2nd arg
+29800a	# 002d:  	addi    r3  r0 $10      # second arg value
+11f4	# 0030:  	sw      r3  r7 r2       # store in stack frame
+548023	# 0032:  	call    r1  fact
+290006	# 0035:  	addi    r2  r0 $6       # index from sp to return value
+09f4	# 0038:  	lw      r3  r7 r2       # fetch return value into r3
+2bf006	# 003a:  	addi    r7  r7 $6       # restore stack pointer
+5980	# 003d:  	printr  r3              # print the max
+28f002	# 003f:  	addi    r1  r7 $2       # restore stack pointer
+0882	# 0042:  	lw      r1  r0 r1       # fetch return address
+5002	# 0044:  	jr      r0  r0 r1       # return
+	# 0046:          .align
+2bfffc	# 0046:  fact:   addi r7 r7 $-4 # allocate stack space
+290004	# 0049:          addi r2 r0 $4  # index from sp to return address field
+10f4	# 004c:          sw   r1 r7 r2  # save return address
+290008	# 004e:          addi r2 r0 $8  # index from sp to n
+09f4	# 0051:          lw   r3 r7 r2  # r3 = n
+2a0002	# 0053:          addi r4 r0 $2  # index from sp to max
+283fff	# 0056:          addi r8 r3 $-1 # r8 = n - 1
+22b0	# 0059:          mul  r5 r3 r8  # fact = n * (n-1) saved in r5      
+4086	# 005b:          cmp  r1 r0 r3  # compare 0 and n
+4404	# 005d:          be   :done     # if n = 0 done
+1b6a	# 005f:          add  r6 r6 r5  # incremented fact
+0b76	# 0061:  done:  lw   r6 r7 r3  # set return value
+290004	# 0063:         addi r2 r0 $4  # index from sp to return address
+08f4	# 0066:         lw   r1 r7 r2  # fetch return address
+2bf004	# 0068:         addi r7 r7 $4  # restore stack pointer
+5002	# 006b:         jr   r0 r0 r1  # return to return address
