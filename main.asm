@@ -33,7 +33,7 @@ main:   sw      r1  r0  r7      # push return address
 	lw      r3  r7 r2       # fetch return value into r3
 	addi    r7  r7 $6       # restore stack pointer
 
-	printr  r3              # print the fact
+	printr  r5              # print the fact
 
 	addi    r1  r7 $2       # restore stack pointer
 	lw      r1  r0 r1       # fetch return address
